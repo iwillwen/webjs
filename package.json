@@ -3,12 +3,7 @@
   "version": "0.3.5",
   "description": "Simple and stable devlopment for Node.js",
   "homepage": "http://github.com/iwillwen/webjs",
-  "keywords": [
-    "http",
-    "tcp",
-    "framework",
-    "simple"
-  ],
+  "keywords": ["http", "tcp", "framework", "simple", "restful"],
   "author": "Will Wen Gunn <willwengunn@gmail.com> (http://www.iwillwen.com)",
   "repository": {
     "type": "git",
@@ -17,8 +12,11 @@
   "main": "index",
   "dependencies": {
     "mustache": "0.3.1-dev",
+    "commander": "0.3.2",
+    "mkdirp": "0.0.7",
     "formidable": "latest"
   },
+  "bin": {"webjs": "./bin/webjs"},
   "devDependencies": {},
   "engines": {
     "node": ">= 0.4.0"

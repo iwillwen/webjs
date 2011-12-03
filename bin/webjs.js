@@ -1,0 +1,126 @@
+#!/usr/bin/env node
+
+//CLI
+
+var web = require('../'),
+	exec = require('child_process').exec,
+	program = require('commander'),
+	mkdirp = require('mkdirp'),
+	fs = require('fs');
+
+
+program
+	.version(web.version)
+	.option('-cl, --client', 'add clientrank support')
+	.option('-pl, --plugin', 'create webjs plugin example')
+	.parse(process.argv);
+
+var path = program.args.shift() || '.';
+
+var index = [
+		'<!DOCTYPE html>',
+		'<html>',
+		'	<head>',
+		'		<title>webjs Quick Start</title>',
+		'		<link rel=\'stylesheet\' href=\'/stylesheets/style.css\' />',
+		'	</head>',
+		'	<body>',
+		'		<header>',
+		'			<h1>Thanks for using webjs</h1>',
+		'		</header>',
+		'		<section>',
+		'			<article>',
+		'				<p>Let\'s get start with webjs.</p>'
+		'			</article>',
+		'		</section>',
+		'	</body>',
+		'</html>'
+	].join('\r\n'),
+	css = [
+		'body {',
+		'	padding: 50px;',
+		'	font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;',
+		'}',
+		'',
+		'a {',
+		'	color: #00B7FF;',
+		'}'
+	].join('\r\n'),
+	server = [
+		'var web = require(\'webjs\')',
+		'	.run()',
+		'	.url(\'\/\', \'public\')',
+		'	.config({',
+		'		\'views\': \'./views\','
+		'		\'mode\': \'dev\'',
+		'		\'cookiesParse\': true',
+		'		\'sessionParse\': true',
+		'	});'
+	].join('\r\n'),
+	server_plugin = [
+		'var web = require(\'webjs\')',
+		'	.run()',
+		'	.url(\'\/\', \'public\')',
+		'	.extend(\'.\/plugin\')',
+		'	.config({',
+		'		\'views\': \'./views\','
+		'		\'mode\': \'dev\'',
+		'		\'cookiesParse\': true',
+		'		\'sessionParse\': true',
+		'	});'
+	].join('\r\n'),
+	plugin = [
+		'module.exports = function (web) {',
+			'web.get(\'plugin\', function (req, res) {',
+				'res.send(\'This is a webjs plugin demo.\');',
+			'});',
+		'};'
+	].join('\r\n');
+
+function emptyDirectory(path, fn) {
+  fs.readdir(path, function(err, files){
+    if (err && 'ENOENT' != err.code) throw err;
+    fn(!files || !files.length);
+  });
+}
+function write(path, str) {
+  fs.writeFile(path, str);
+  console.log('   \x1b[36mcreate\x1b[0m : ' + path);
+}
+function mkdir(path, fn) {
+  mkdirp(path, 0755, function(err){
+    if (err) throw err;
+    console.log('   \033[36mcreate\033[0m : ' + path);
+    fn && fn();
+  });
+}
+function abort(str) {
+  console.error(str);
+  process.exit(1);
+}
+mkdir(path, function(){
+	//Public
+	mkdir(path + '/public');
+	mkdir(path + '/public/js');
+	mkdir(path + '/public/images');
+	mkdir(path + '/public/css', function(){
+		write(path + '/public/stylesheets/style.css', css);
+	});
+
+	//Controller
+	mkdir(path + '/controllers', function() {
+		write(path + '/controllers/server.js', server);
+		if (program.plugin) {
+			write(path + '/controllers/plugin.js');
+			write(path + '/controllers/server.js', server_plugin);
+		} else {
+			write(path + '/controllers/server.js', server);
+		}
+	});
+
+	//Modules
+	mkdir(path + '/modules');
+
+	//Views
+	mkdir(path + '/views');
+});
