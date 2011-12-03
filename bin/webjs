@@ -3,7 +3,6 @@
 //CLI
 
 var web = require('../'),
-	exec = require('child_process').exec,
 	program = require('commander'),
 	mkdirp = require('mkdirp'),
 	fs = require('fs');
@@ -11,8 +10,8 @@ var web = require('../'),
 
 program
 	.version(web.version)
-	.option('-cl, --client', 'add clientrank support')
-	.option('-pl, --plugin', 'create webjs plugin example')
+	.option('-c, --client', 'add clientrank support')
+	.option('-p, --plugin', 'create webjs plugin example')
 	.parse(process.argv);
 
 var path = program.args.shift() || '.';
@@ -30,7 +29,7 @@ var index = [
 		'		</header>',
 		'		<section>',
 		'			<article>',
-		'				<p>Let\'s get start with webjs.</p>'
+		'				<p>Let\'s get start with webjs.</p>',
 		'			</article>',
 		'		</section>',
 		'	</body>',
@@ -47,27 +46,31 @@ var index = [
 		'}'
 	].join('\r\n'),
 	server = [
+		'module.exports = function () {'
 		'var web = require(\'webjs\')',
 		'	.run()',
 		'	.url(\'\/\', \'public\')',
 		'	.config({',
-		'		\'views\': \'./views\','
+		'		\'views\': \'./views\',',
 		'		\'mode\': \'dev\'',
 		'		\'cookiesParse\': true',
 		'		\'sessionParse\': true',
-		'	});'
+		'	});',
+		'}'
 	].join('\r\n'),
 	server_plugin = [
+		'module.exports = function () {'
 		'var web = require(\'webjs\')',
 		'	.run()',
 		'	.url(\'\/\', \'public\')',
 		'	.extend(\'.\/plugin\')',
 		'	.config({',
-		'		\'views\': \'./views\','
+		'		\'views\': \'./views\',',
 		'		\'mode\': \'dev\'',
 		'		\'cookiesParse\': true',
 		'		\'sessionParse\': true',
-		'	});'
+		'	});',
+		'}'
 	].join('\r\n'),
 	plugin = [
 		'module.exports = function (web) {',
@@ -94,10 +97,6 @@ function mkdir(path, fn) {
     fn && fn();
   });
 }
-function abort(str) {
-  console.error(str);
-  process.exit(1);
-}
 mkdir(path, function(){
 	//Public
 	mkdir(path + '/public');
@@ -109,7 +108,6 @@ mkdir(path, function(){
 
 	//Controller
 	mkdir(path + '/controllers', function() {
-		write(path + '/controllers/server.js', server);
 		if (program.plugin) {
 			write(path + '/controllers/plugin.js');
 			write(path + '/controllers/server.js', server_plugin);
@@ -123,4 +121,5 @@ mkdir(path, function(){
 
 	//Views
 	mkdir(path + '/views');
+	process.exit(1);
 });
