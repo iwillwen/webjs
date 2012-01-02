@@ -1,22 +1,31 @@
-var http=require('http');
+var http = require('http'),
+    asynclist = require('asynclist');
 
-var options = {
-  host: 'www.google.com',
-  port: 80,
-  path: '',
-  method: 'GET'
+var opts = {
+  host: '127.0.0.1'
 };
-
-var req = http.request(options, function(res) {
-  console.log('STATUS: ' + res.statusCode);
-  console.log('HEADERS: ' + JSON.stringify(res.headers));
-  res.setEncoding('utf8');
-  res.on('data', function (chunk) {
-    console.log('BODY: ' + chunk);
+var list = [],
+    succeed = 0,
+    failed = 0;
+for (var i = 0; i < 1001; i++)
+  list.push(function () {
+    http.get(opts, function (res) {
+      res.on('end', function () {
+        succeed++;
+        tasks.trigger(true);
+      });
+    }).on('error', function (e) {
+        console.log('error!');
+        failed++;
+        tasks.trigger(false);
+    });
   });
-});
-
-req.on('error', function(e) {
-  console.log('problem with request: ' + e.message);
-});
-req.end();
+var timeout = 0,
+    timer = setInterval(function () {
+      timeout++;
+    }, 1);
+var tasks = new asynclist(list);
+tasks.assign(function () {
+    clearInterval(timer);
+    console.log('Finished. Used time: ' + timeout + 'ms');
+}).run();
