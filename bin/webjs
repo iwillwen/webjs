@@ -2,12 +2,34 @@
 
 //CLI
 
-var web = require('../'),
-    program = require('commander'),
-    mkdirp = require('mkdirp'),
-    fs = require('fs'),
-    asynclist = require('asynclist');
-
+var web = require('../');
+var program = require('commander');
+var mkdirp = require('mkdirp');
+var fs = require('fs');
+var asynclist = require('asynclist');
+var files = [];
+function parseDir (path, root, cb) {
+    function check (name, _root) {
+        fs.stat(name, function (err, stat) {
+            if (stat.isFile()) {
+                if (_root == '.') {
+                    files.push(name);
+                } else {
+                    if (files[_root] == undefined) files[_root] = []
+                    files[_root].push = 
+                }
+                tasks.trigger(_root + '/' + name);
+            }
+            return parseDir(name, path);
+        })
+    }
+    fs.readDir(root + '/' + path, function (err, dir) {
+        var _ = new asynclist(dir.map(check));
+        _.assign(function (files) {
+            cb();
+        }).run();
+    });
+}
 
 program
     .version(web.version)
