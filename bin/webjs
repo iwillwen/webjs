@@ -1,0 +1,188 @@
+ #!/usr/bin/env node
+
+//CLI
+
+var web = require('webjs');
+var program = require('commander');
+var mkdirp = require('mkdirp');
+var fs = require('fs');
+var asynclist = require('asynclist');
+program
+    .version(web.version)
+    .usage('[option] <value..>')
+    .option('-c, --cookie', 'Add cookie support')
+    .option('-s, --session', 'Add session support')
+    .option('-b, --body', 'Add body parser support')
+    .option('-r, --rest', 'Add more HTTP methods support')
+    .option('--mustache', 'Add mustache template engine support (defaults to jade)')
+    .option('--ejs', 'Add ejs template engine support (defaults to jade)')
+    .option('--tmpl <engine>', 'Set the template engine')
+    .option('--mode <mode>', 'Set the mode (defaults to production)')
+    .on('--help', function(){
+        console.log('  Examples:');
+        console.log('');
+        console.log('    $ webjs');
+        console.log('    $ webjs init -s -c -b -r --mode pro');
+        console.log('    $ webjs run 8080');
+        console.log('');
+    });
+
+var path = program.args.shift() || '.';
+program
+    .command('run <port>')
+    .description('run a simple http server here')
+    .action(function (port) {
+        web.run(port)
+            .use(web.static(path));
+    });
+
+program
+    .command('init')
+    .description('Initialize a webjs app here')
+    .action(function () {
+        program.inite = true;
+        mkdir(path, function(){
+            //Public
+            var paths = [
+                path + '/static',
+                path + '/controllers',
+                path + '/models',
+                path + '/views',
+                path + '/static/js',
+                path + '/static/css'
+            ];
+            var list = paths.map(function (_path) {
+                return function () {
+                    mkdir(_path, function () {
+                        tasks.trigger(_path);
+                    });
+                };
+            });
+            var tasks = new asynclist(list);
+            tasks.assign(function () {
+                var files = [
+                    [path + '/static/css/style.css', css],
+                    [path + '/static/index.html', index_html],
+                    [path + '/controllers/index.js', index],
+                    [path + '/controllers/router.js', router],
+                    [path + '/views/hello.jade', hello],
+                    [path + '/server.js', server]
+                ];
+                var _list = files.map(function (file) {
+                    return function () {
+                        write(file[0], file[1], function () {
+                            filesTasks.trigger(file);
+                        });
+                    };
+                });
+                var filesTasks = new asynclist(_list);
+                filesTasks.assign(function () {
+                    console.log('Enjoy!');
+                    process.exit(1);
+                });
+                filesTasks.run();
+            });
+            tasks.run();
+        });
+    });
+program.parse(process.argv);
+program.template = 'jade';
+if (program.mustache) program.template = 'mustache';
+if (program.ejs) program.template = 'ejs';
+program.mode = program.mode || 'pro';
+if (program.dev) program.mode = 'dev';
+
+var index_html = [
+    '<!DOCTYPE html>',
+    '<html>',
+    '   <head>',
+    '       <title>webjs Quick Start</title>',
+    '       <link rel=\'stylesheet\' href=\'/css/style.css\' />',
+    '   </head>',
+    '   <body>',
+    '       <header>',
+    '           <h1>Thanks for using webjs</h1>',
+    '       </header>',
+    '       <section>',
+    '           <article>',
+    '               <p>Let\'s get start with webjs.</p>  <a href="/hello" target="_top">Example</a>',
+    '           </article>',
+    '       </section>',
+    '   </body>',
+    '</html>'
+].join('\r\n');
+var css = [
+    'body {',
+    '   padding: 50px;',
+    '   font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;',
+    '}',
+    'a {',
+    '   color: #00B7FF;',
+    '}'
+].join('\r\n');
+var index = [
+    'module.exports = function () {',
+    '    var web = require(\'webjs\');',
+    '',
+    '    web.run()',
+    '        .config({',
+    '            \'view engine\': \'' + program.template + '\',',
+    '            \'views\': __dirname + \'/../views\',',
+    (program.rest ? '            \'readonly\': false,' : ''),
+    '            \'mode\': \'' + program.mode  + '\'',
+    '        })',
+    '        .use(web.static(__dirname + \'/../static\'))',
+    (program.cookie ? '        .use(web.cookieParser())' : ''),
+    (program.session ? '        .use(web.session())' : ''),
+    (program.body ? '        .use(web.bodyParser())' : ''),
+    '        .extend(__dirname + \'/router\');',
+    '}'
+].join('\r\n');
+var router = [
+    'module.exports = function (web) {',
+    '   web.get({',
+    '       \'/hello\': function (req, res) {',
+    (program.session ? '           if (isNaN(req.session.times))\r\n               req.session.times = 0\r\n           else\r\n               req.session.times++;' : ''),
+    '           res.render(\'hello\', {',
+    (program.session ? '               times: req.session.times,' : ''),
+    '               title: \'webjs\'',
+    '           });',
+    '       }',
+    '   });',   
+    '};'
+].join('\r\n');
+var server = [
+    'require(__dirname + \'/controllers/\')()'
+].join('\r\n');
+var hello = [
+    'html',
+    '    head',
+    '        title Hello World!',
+    '        link(type=\'text/css\', rel=\'stylesheet\', href=\'/css/style.css\')',
+    '    h1 Hello World!',
+    '    p Welcome to #{title}',
+    (program.session ? '    p You had refreshed #{times} times' : '')
+].join('\r\n');
+
+function emptyDirectory (path, fn) {
+  fs.readdir(path, function(err, files){
+    if (err && 'ENOENT' != err.code) throw err;
+    fn(!files || !files.length);
+  });
+}
+function write (path, str, fn) {
+  fs.writeFile(path, str, function () {
+    console.log('   \x1b[36mcreate\x1b[0m : ' + path);
+    fn();
+  });
+}
+function mkdir (path, fn) {
+  mkdirp(path, 0755, function(err){
+    if (err) throw err;
+    console.log('   \033[36mcreate\033[0m : ' + path);
+    fn && fn();
+  });
+}
+function list (val) {
+    return val.split(',');
+}
