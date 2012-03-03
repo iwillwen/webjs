@@ -10,6 +10,10 @@ or
 
     $ npm install webjs@latest
 
+# App Demo
+    $ webjs -h
+
+    $ webjs init --all
  
 # Quick Start
 

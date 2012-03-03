@@ -1,10 +1,10 @@
 {
   "name": "webjs",
-  "version": "0.4.9",
+  "version": "0.5.0",
   "description": "Simple and stable development for Node.js",
   "homepage": "http://github.com/iwillwen/webjs",
   "keywords": ["http", "tcp", "framework", "simple", "restful", "performance"],
-  "author": "Will Wen Gunn <willwengunn@gmail.com> (http://www.iwillwen.com)",
+  "author": "Will Wen Gunn <willwengunn@gmail.com> (http://wen.jit.im)",
   "repository": {
     "type": "git",
     "url": "git://github.com/iwillwen/webjs.git"
@@ -18,7 +18,8 @@
     "formidable": "latest",
     "eventproxy": "latest",
     "emitter": "latest",
-    "bufferhelper": "latest"
+    "bufferhelper": "0.1.0",
+    "dataStream": "0.0.1"
   },
   "bin": {"webjs": "./bin/webjs"},
   "devDependencies": {
