@@ -97,7 +97,7 @@ program.template = 'jade';
 if (program.mustache) program.template = 'mustache';
 if (program.ejs) program.template = 'ejs';
 program.mode = program.mode || 'pro';
-if (program.dev) program.mode = 'dev';
+if (!program.port) program.port = '';
 
 var index_html = [
     '<!DOCTYPE html>',
@@ -222,11 +222,12 @@ var less = [
 var index = [
     'var web = require(\'webjs\');',
     '',
-    'web.run(' + (program.port ? program.port : '') + ')',
+    'web.run(' + program.port + ')',
     '    .config({',
     '        \'view engine\': \'' + program.template + '\',',
     '        \'views\': __dirname + \'/../views\',',
     (program.rest || program.all ? '        \'readonly\': false,' : ''),
+    (program.mode == 'dev' ? '        \'dbgPath\': __dirname + \'/..\',' : ''),
     '        \'mode\': \'' + program.mode  + '\'',
     '    })',
     '    .use(web.static(__dirname + \'/../static\'))',
@@ -235,7 +236,9 @@ var index = [
     (program.body || program.all ? '    .use(web.bodyParser())' : ''),
     (program.compiler || program.all ? '    .use(web.compiler({ enable: ' + JSON.stringify((program.compiler ? program.compiler : ["less", "sass"])) + ' }))' : ''),
     (program.compress || program.all ? '    .use(web.compress())' : ''),
-    '    .extend(__dirname + \'/router\');'
+    '    .extend(__dirname + \'/router\');',
+    '',
+    'console.log(\'The app is running!\');'
 ].join('\r\n');
 var router = [
     'module.exports = function (web) {',
@@ -261,7 +264,7 @@ var hello = [
 var layout = [
     'html',
     '   head',
-    '       title Hello World!',
+    '       title= title',
     '       link(type=\'text/css\', rel=\'stylesheet\', href=\'/css/style.' + (program.compiler || program.all ? 'less' : 'css') + '\')',
     '       link(type=\'text/css\', rel=\'stylesheet\', href=\'http://fonts.googleapis.com/css?family=Yanone+Kaffeesatz:200,300,400,700\')',
     '   != body'

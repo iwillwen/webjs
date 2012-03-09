@@ -18,7 +18,7 @@
     "formidable": "latest",
     "eventproxy": "latest",
     "emitter": "latest",
-    "bufferhelper": "0.1.0",
+    "bufferhelper": "latest",
     "dataStream": "0.0.1"
   },
   "bin": {"webjs": "./bin/webjs"},
