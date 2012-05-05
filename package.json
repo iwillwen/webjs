@@ -1,10 +1,21 @@
 {
   "name": "webjs",
-  "version": "0.5.0",
+  "version": "0.5.4",
   "description": "Simple and stable development for Node.js",
   "homepage": "http://github.com/iwillwen/webjs",
-  "keywords": ["http", "tcp", "framework", "simple", "restful", "performance"],
-  "author": "Will Wen Gunn <willwengunn@gmail.com> (http://wen.jit.im)",
+  "keywords": [
+    "http",
+    "tcp",
+    "framework",
+    "simple",
+    "restful",
+    "performance"
+  ],
+  "author": {
+    "name": "Will Wen Gunn",
+    "email": "willwengunn@gmail.com",
+    "url": "http://wen.jit.im"
+  },
   "repository": {
     "type": "git",
     "url": "git://github.com/iwillwen/webjs.git"
@@ -19,9 +30,11 @@
     "eventproxy": "latest",
     "emitter": "latest",
     "bufferhelper": "latest",
-    "dataStream": "0.0.1"
+    "dataStream": "latest"
   },
-  "bin": {"webjs": "./bin/webjs"},
+  "bin": {
+    "webjs": "./bin/webjs"
+  },
   "devDependencies": {
     "mustache": "latest",
     "ejs": "latest"
@@ -29,5 +42,16 @@
   "engines": {
     "node": ">= 0.4.0"
   },
-  "expresso":""
+  "expresso": "",
+  "_npmUser": {
+    "name": "iwillwen",
+    "email": "willwengunn@gmail.com"
+  },
+  "_id": "webjs@0.5.3",
+  "optionalDependencies": {},
+  "_engineSupported": true,
+  "_npmVersion": "1.1.12",
+  "_nodeVersion": "v0.6.14",
+  "_defaultsLoaded": true,
+  "_from": "webjs"
 }
