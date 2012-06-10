@@ -12,5 +12,5 @@ var getRouter = {
 		}
 	}
 };
-web.run({}, 8888)
+web.run(8888)
 	.get(getRouter);

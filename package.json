@@ -1,6 +1,6 @@
 {
   "name": "webjs",
-  "version": "0.5.3",
+  "version": "0.5.5",
   "description": "Simple and stable development for Node.js",
   "homepage": "http://github.com/iwillwen/webjs",
   "keywords": [
@@ -26,11 +26,13 @@
     "commander": "0.3.2",
     "mkdirp": "0.0.7",
     "asynclist": "latest",
-    "formidable": "latest",
     "eventproxy": "latest",
     "emitter": "latest",
     "bufferhelper": "latest",
-    "dataStream": "latest"
+    "dataStream": "latest",
+    "connect": "latest",
+    "mime": "latest",
+    "crc": "latest"
   },
   "bin": {
     "webjs": "./bin/webjs"
@@ -47,7 +49,7 @@
     "name": "iwillwen",
     "email": "willwengunn@gmail.com"
   },
-  "_id": "webjs@0.5.3",
+  "_id": "webjs@0.5.4",
   "optionalDependencies": {},
   "_engineSupported": true,
   "_npmVersion": "1.1.12",

@@ -1,7 +1,7 @@
 /*
  * @fileOverview
  * @author Will Wen Gunn
- * @version 0.5.0
+ * @version 0.5.5
  */
 /*
  * @constructor webjs
