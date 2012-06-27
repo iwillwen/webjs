@@ -236,7 +236,7 @@ var index = [
     (program.compiler || program.all ? '        web.compiler({ enable: ' + JSON.stringify((program.compiler ? program.compiler : ["less", "sass"])) + ' }),' : ''),
     (program.compress || program.all ? '        web.compress(),' : ''),
     '        web.static(__dirname + \'/../static\')',
-    '    )'
+    '    )',
     '    .extend(__dirname + \'/router\');',
     '',
     'console.log(\'The app is running!\');'
