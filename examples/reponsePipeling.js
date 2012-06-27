@@ -36,15 +36,17 @@ web.run(8888)
     .use(web.compress())
     .use(function (req, res, next) {
 
-        // Some methods
-        res.data = function (obj) {
-            this.dataBuffer = obj;
-            return this;
-        };
+        // collect data
+
+        res.__defineGetter__('data', function () {
+            return function (data) {
+                this.data = data;
+            }
+        })
 
         // Working
         res.pipelining(function () {
-            switch (this.dataBuffer.type) {
+            switch (this.data.type) {
                 case "one":
                 // do something
             }

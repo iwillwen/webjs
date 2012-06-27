@@ -167,23 +167,25 @@ You can use this to edit the data will be sent to the client. Such as compress, 
     var web = require('webjs');
     var zlib = require('zlib');
     web.run()
-        .use(web.static(__dirname + '/static'))
-        .use(function (req, res, next) {
-            res.pipelining(function () {
-                var acceptEncoding = req.headers['accept-encoding'] || "";
-                var need = /css|js|html/ig.test(res.format);
-                if (need && acceptEncoding.match(/\bgzip\b/)) {
-                    res.header('Content-Encoding', 'gzip');
-                    res.removeHeader('Content-Length');
-                    return zlib.createGzip();
-                } else if (need && acceptEncoding.match(/\bdeflate\b/)) {
-                    res.header('Content-Encoding', 'deflate');
-                    res.removeHeader('Content-Length');
-                    return zlib.createDeflate();
-                }
-            });
-            next();
-        });
+        .use(
+            web.static(__dirname + '/static'),
+            function (req, res, next) {
+                res.pipelining(function () {
+                    var acceptEncoding = req.headers['accept-encoding'] || "";
+                    var need = /css|js|html/ig.test(res.format);
+                    if (need && acceptEncoding.match(/\bgzip\b/)) {
+                        res.header('Content-Encoding', 'gzip');
+                        res.removeHeader('Content-Length');
+                        return zlib.createGzip();
+                    } else if (need && acceptEncoding.match(/\bdeflate\b/)) {
+                        res.header('Content-Encoding', 'deflate');
+                        res.removeHeader('Content-Length');
+                        return zlib.createDeflate();
+                    }
+                });
+                next();
+            }
+        );
 
 ## 404 Page
 
@@ -216,23 +218,13 @@ Web.js supports the middleware.
 支持中间件，支持express和connect所有的中间件。
 
 
-    var stylus = require('stylus');
-    web.use(stylus.middleware({
-        src: __dirname + '/views',
-        dest: __dirname + '/public',
-        compile: compile
-    }));
+    var web = require('webjs');
 
-or
+    web.run()
+        .use(
+                web.static()
+            )
 
-
-    var app = require('webjs').create(),
-        stylus = require('stylus');
-    app.use(stylus.middleware({
-        src: __dirname + '/views',
-        dest: __dirname + '/public',
-        compile: compile
-    })).listen(8888);
 
 # webjs plugin
 
@@ -265,7 +257,7 @@ You can use it to modular your app functions.
 
 (The MIT License)
 
-Copyright (c) 2010-2012 Will Wem Gunn (甘超阳) &lt;willwengunn@gmail.com&gt;
+Copyright (c) 2010-2012 Will Wen Gunn (甘超阳) &lt;willwengunn@gmail.com&gt;
 
 Permission is hereby granted, free of charge, to any person obtaining
 a copy of this software and associated documentation files (the
