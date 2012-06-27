@@ -229,27 +229,27 @@ var index = [
     (program.mode == 'dev' ? '        \'dbgPath\': __dirname + \'/..\',' : ''),
     '        \'mode\': \'' + program.mode  + '\'',
     '    })',
-    '    .use(web.static(__dirname + \'/../static\'))',
-    (program.cookie || program.all ? '    .use(web.cookieParser())' : ''),
-    (program.session || program.all ? '    .use(web.session())' : ''),
-    (program.body || program.all ? '    .use(web.bodyParser())' : ''),
-    (program.compiler || program.all ? '    .use(web.compiler({ enable: ' + JSON.stringify((program.compiler ? program.compiler : ["less", "sass"])) + ' }))' : ''),
-    (program.compress || program.all ? '    .use(web.compress())' : ''),
+    '    .use(',
+    (program.cookie || program.all ? '        web.cookieParser(\'webjs\'),' : ''),
+    (program.session || program.all ? '        web.session(),' : ''),
+    (program.body || program.all ? '        web.bodyParser(),' : ''),
+    (program.compiler || program.all ? '        web.compiler({ enable: ' + JSON.stringify((program.compiler ? program.compiler : ["less", "sass"])) + ' }),' : ''),
+    (program.compress || program.all ? '        web.compress(),' : ''),
+    '        web.static(__dirname + \'/../static\')',
+    '    )'
     '    .extend(__dirname + \'/router\');',
     '',
     'console.log(\'The app is running!\');'
 ].join('\r\n');
 var router = [
     'module.exports = function (web) {',
-    '   web.get({',
-    '       \'/hello\': function (req, res) {',
-    (program.session || program.all ? '           if (isNaN(req.session.times))\r\n               req.session.times = 0\r\n           else\r\n               req.session.times++;' : ''),
-    '           res.render(\'hello\', {',
-    (program.session || program.all ? '               times: req.session.times,' : ''),
-    '               title: \'webjs\'',
-    '           });',
-    '       }',
-    '   });',   
+    '    web.get(\'/hello\'， function (req, res) {',
+    (program.session || program.all ? '            if (isNaN(req.session.times))\r\n                req.session.times = 0\r\n            else\r\n                req.session.times++;' : ''),
+    '            res.render(\'hello\', {',
+    (program.session || program.all ? '            times: req.session.times,' : ''),
+    '            title: \'webjs\'',
+    '        });',
+    '    });',   
     '};'
 ].join('\r\n');
 var server = [

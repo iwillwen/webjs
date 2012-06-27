@@ -1,6 +1,6 @@
-# Web.js: Simple HTTP / TCP development framework.
+# webjs: Simple HTTP / TCP development framework.
 
-For detailed information about this, please visit the [Web.js homepage]. 如果想获得详细的关于Web.js的信息，请浏览官方网页。
+For detailed information about this, please visit the [webjs homepage](http://web.c61.me). 如果想获得详细的关于Web.js的信息，请浏览[官方网站](http://web.c61.me)。
 
 # Install
     $ npm install webjs
@@ -170,19 +170,23 @@ You can use this to edit the data will be sent to the client. Such as compress, 
         .use(
             web.static(__dirname + '/static'),
             function (req, res, next) {
+
+                // collect data
+
+                res.__defineGetter__('data', function () {
+                    return function (data) {
+                        this.data = data;
+                    }
+                })
+
+                // Working
                 res.pipelining(function () {
-                    var acceptEncoding = req.headers['accept-encoding'] || "";
-                    var need = /css|js|html/ig.test(res.format);
-                    if (need && acceptEncoding.match(/\bgzip\b/)) {
-                        res.header('Content-Encoding', 'gzip');
-                        res.removeHeader('Content-Length');
-                        return zlib.createGzip();
-                    } else if (need && acceptEncoding.match(/\bdeflate\b/)) {
-                        res.header('Content-Encoding', 'deflate');
-                        res.removeHeader('Content-Length');
-                        return zlib.createDeflate();
+                    switch (this.data.type) {
+                        case "one":
+                        // do something
                     }
                 });
+
                 next();
             }
         );
@@ -191,26 +195,6 @@ You can use this to edit the data will be sent to the client. Such as compress, 
 
     web.setErrorPage(404, __dirname + '/404.html');                             //Set a file path. 传入一个文件名
 
-## noMimes
-Block some get request which gets some file with specified extname. 禁止某些文件类型
-
-    var noMimes = {
-        'php' : function (req, res){
-            res.send('You can`t request any PHP files');
-        },
-        'exe' : function (req, res){
-            res.send('You can`t request any EXE files');
-        },
-        'sh' : function (req, res){
-            res.send('You can`t request any SH files');
-        }
-    };
-    web.noMimes(noMimes);
-
-## Custom MIME type 自定义 MIME 类型
-
-
-    web.reg('ext', 'image/ext');
 
 ## Middleware 中间件
 
@@ -222,8 +206,13 @@ Web.js supports the middleware.
 
     web.run()
         .use(
-                web.static()
-            )
+            web.bodyParser(),
+            web.cookiesParser('webjs'),
+            web.session(),
+            web.compress(),
+            web.complier({ enable: ["less", "sass"] }),
+            web.static(__dirname + '/static')
+        );
 
 
 # webjs plugin
@@ -247,9 +236,14 @@ You can use it to modular your app functions.
 
 
     module.exports = function (web) {
-        web.foo = function () {
+        web.__defineGetter__('foo', function () {
             return this.servers;
-        }
+        });
+
+        // or
+        web.fn('bar', funtion () {
+            // do something
+        });
     }
     
     
