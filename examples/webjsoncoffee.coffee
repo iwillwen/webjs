@@ -6,10 +6,11 @@ web.run(8888)
       'view engine': 'jade'
       'mode': 'dev'
    )
-   .use(web.complier enable: ["less"])
-   .use(do web.compress)
-   .use '/public', web.static __dirname + '/..'
-
+   .use(
+        web.complier enable: ["less"]
+        do web.compress
+        '/public', web.static __dirname + '/..'
+    )
 
 web.get
     '/hello': (req, res) ->
