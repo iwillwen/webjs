@@ -1,0 +1,62 @@
+{
+  "name": "webjs",
+  "version": "0.6.1",
+  "description": "Simple and stable development for Node.js",
+  "homepage": "http://github.com/iwillwen/webjs",
+  "keywords": [
+    "http",
+    "tcp",
+    "framework",
+    "simple",
+    "restful",
+    "performance"
+  ],
+  "author": {
+    "name": "Will Wen Gunn",
+    "email": "willwengunn@gmail.com",
+    "url": "http://im1996.com"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/iwillwen/webjs.git"
+  },
+  "main": "index",
+  "dependencies": {
+    "ejs": "latest",
+    "commander": "0.3.2",
+    "mkdirp": "0.0.7",
+    "asynclist": "latest",
+    "eventproxy": "latest",
+    "emitter": "latest",
+    "bufferhelper": "latest",
+    "dataStream": "latest",
+    "connect": "latest",
+    "mime": "latest",
+    "crc": "latest"
+  },
+  "bin": {
+    "webjs": "./bin/webjs"
+  },
+  "devDependencies": {
+    "mustache": "latest",
+    "jade": "latest"
+  },
+  "engines": {
+    "node": ">= 0.4.0"
+  },
+  "_npmUser": {
+    "name": "iwillwen",
+    "email": "willwengunn@gmail.com"
+  },
+  "_id": "webjs@0.6.0",
+  "optionalDependencies": {},
+  "_engineSupported": true,
+  "_npmVersion": "1.1.12",
+  "_nodeVersion": "v0.6.14",
+  "_defaultsLoaded": true,
+  "_from": "webjs",
+  "readme": "# webjs: Simple HTTP / TCP development framework.\r\n\r\nFor detailed information about this, please visit the [webjs homepage](http://web.c61.me). 如果想获得详细的关于Web.js的信息，请浏览[官方网站](http://web.c61.me)。\r\n\r\n# Install\r\n    $ npm install webjs\r\n\r\nor\r\n\r\n\r\n    $ npm install webjs@latest\r\n\r\n# App Demo\r\n    $ webjs -h\r\n\r\n    $ webjs init --all\r\n \r\n# Quick Start\r\n\r\n    var web = require('webjs');\r\n\r\n    var urlRouter = {                   //Url Router(inclube file and 302 jump) URL路由功能(包括文件映射和域名跳转)\r\n        '/:id.html' : 'page.html', //Return the 'page.html' data. 返回 'page.html' 的数据。(支持正则表达式)\r\n        '/google' : 'http://www.google.com' //When the path name is 'google', the browser will redirect to Google homepage.  当访问/google时，浏览器自动跳转到Google首页。\r\n    };\r\n    var getRouter = {                   //Get Method Router and handler GET方法服务器响应\r\n        '/getsomething' : function (req, res) {\r\n            for (var key in req.qs) {\r\n                res.send(key + ' : ' + req.qs[key], true);      //res.send 方法接受两个参数，第一个是需要传输的数据，第二个是确定是否保持通讯不中断，以供继续传输。\r\n            }\r\n            res.send('That all');\r\n        }\r\n    };\r\n    var postRouter = {\r\n        '/postsomething' : function (req, res) {   //Post Method Router and handler POST方法服务器响应\r\n            res.send('Post success<br />' + JSON.stringify(req.data));\r\n        }\r\n    };\r\n    web.run()  //Run the first http server 启动首个服务器\r\n        .url(urlRouter) //Set the url router 传入URL映射规则\r\n        .get(getRouter) //Set the get method router 传入GET方法规则\r\n        .post(postRouter)  //Set the post method router 传入POST方法规则\r\n        .use(web.bodyParser()); //Use the Body Parser\r\n\r\n# Simple Deployment 简单化部署\r\n\r\n如果你只想在某个文件夹内建立一个简单的文件服务器，那是非常简单的。 If you only want to deploy a simple file server, that's very easy!\r\n\r\n\r\n    var web = require('webjs').run();\r\n    web.use(web.static(__dirname));\r\n\r\nor\r\n\r\n\r\n    var app = require('webjs').create('http').listen();\r\n    app.use(app.bodyParser());\r\n\r\nYes! It's so cool!\r\n没错的，就是这么简单。\r\n\r\n# Url Router URL路由映射\r\n\r\n## Web.js supports a Url Router which is very easy to use. Web.js提供了十分简单的URL路由映射方法\r\n\r\n\r\n    var web = require('webjs');\r\n\r\n    var urlRouter = {\r\n        '/:year/:mouth/:day/:id.jpg' : '$1-$2-$3-$4.jpg',  // YYYY/MM/DD/NUM.jpg -> YYYY-MM-DD-NUM.jpg\r\n        '/:action' : 'main.html?action=$1'                // /get -> main.html?action=get\r\n    };\r\n    web.run(8888)\r\n        .url(urlRouter);\r\n\r\n# HTTP Mothod HTTP方法\r\n\r\n## GET\r\n\r\n    var web = require('webjs');\r\n\r\n    var getRouter = {\r\n        '/getQuerystring' : function (req, res) {            //Set two arguments, they're request and response. 传入两个参数，分别为Request, Response\r\n            res.sendJSON(req.qs);           //The first argument can be an Array, an Object or a String. res.sendJSON()方法可以直接传入Array, Object, String的JSON对象\r\n        },\r\n        '/getQueryURL' : function (req, res) {\r\n            res.send(req.url);          //The first argument must be a String. res.send()方法可以只能传入String数据\r\n        },\r\n        '/getFile' : function (req, res) {\r\n            res.sendFile(req.qs.file);          //The first argument must be a file path.(it needn't begins with './') res.sendFile()方法只能传入含有文件名的String对象，不需要'./'\r\n        }\r\n    };\r\n\r\n    web.run(8888)                               //Set a empty url router. 传入空URL路由规则\r\n        .get(getRouter);                            //Set the get router. 传入GET方法规则\r\n\r\n## POST\r\n\r\n\r\n    var web = require('webjs');\r\n\r\n    var postRouter = {\r\n        '/postHello' : function (req, res) {           //The post router is same to the get router. 与GET方法规则相同\r\n            res.send('Hello ' + req.data.name + '!');\r\n        }\r\n    };\r\n\r\n    web.run({}, 8888)\r\n        .post(postRouter)                          //Set the post router. 传入POST方法规则\r\n        .use(web.bodyParser());\r\n\r\n## 其他HTTP方法\r\n\r\nThe others http method's usages are same to get router.\r\n\r\n\r\n    var web = require('webjs');\r\n\r\n    var putRouter = {\r\n        '/putHello' : function (req, res) {\r\n            res.send('Hello ' + req.data.name + '!');\r\n        }\r\n    };\r\n\r\n    web.run(8888)\r\n        .put(postRouter)\r\n        .use(web.bodyParser());\r\n\r\n\r\n## HTTPS\r\n\r\nHttps's usage is same to http's.\r\nHTTPS方法与HTTP方法相同\r\n\r\n\r\n    var web = require('webjs');\r\n    var urlRouter = {\r\n        '/:id.html' : 'page.html',\r\n        '/google' : 'http://www.google.com'\r\n    };\r\n    var getRouter = {\r\n        '/getQuerystring' : function (req, res) {\r\n            res.sendJSON(req.qs);\r\n        },\r\n        '/getQueryURL' : function (req, res) {\r\n            res.send(req.url);\r\n        },\r\n        '/getFile' : function (req, res) {\r\n            res.sendFile(req.qs.file);  \r\n        }\r\n    };\r\n    var postRouter = {\r\n        '/postHello' : function (req, res) {\r\n            res.send('Hello ' + req.data.name + '!');\r\n        }\r\n    };\r\n    web.runHttps(8888)\r\n        .url(urlRouter)\r\n        .get(getRouter)\r\n        .post(postRouter);\r\n\r\n## Response Pipelining\r\n\r\n通过Response Pipelining，你可以对即将发送至客户端的数据进行处理，如压缩、解析等等。\r\nYou can use this to edit the data will be sent to the client. Such as compress, compile.\r\n\r\n    var web = require('webjs');\r\n    var zlib = require('zlib');\r\n    web.run()\r\n        .use(\r\n            web.static(__dirname + '/static'),\r\n            function (req, res, next) {\r\n\r\n                // collect data\r\n\r\n                res.__defineGetter__('data', function () {\r\n                    return function (data) {\r\n                        this.data = data;\r\n                    }\r\n                })\r\n\r\n                // Working\r\n                res.on('pipelining', function () {\r\n                    switch (this.data.type) {\r\n                        case \"one\":\r\n                        // do something\r\n                    }\r\n                });\r\n\r\n                next();\r\n            }\r\n        );\r\n\r\n## 404 Page\r\n\r\n    web.setErrorPage(404, __dirname + '/404.html');                             //Set a file path. 传入一个文件名\r\n\r\n\r\n## Middleware 中间件\r\n\r\nWeb.js supports the middleware.\r\n支持中间件，支持express和connect所有的中间件。\r\n\r\n\r\n    var web = require('webjs');\r\n\r\n    web.run()\r\n        .use(\r\n            web.bodyParser(),\r\n            web.cookiesParser('webjs'),\r\n            web.session(),\r\n            web.compress(),\r\n            web.complier({ enable: [\"less\", \"sass\"] }),\r\n            web.static(__dirname + '/static')\r\n        );\r\n\r\n\r\n# webjs plugin\r\n\r\nWeb.js supports a very cool plugin mechanism.\r\n\r\n## Modular functions\r\n\r\nYou can use it to modular your app functions.\r\n\r\n\r\n    module.exports = function (web) {\r\n        web.get({\r\n            '/some': function (req, res) {\r\n                res.send('some');\r\n            }\r\n        });\r\n    }\r\n\r\n## Custom functions\r\n\r\n\r\n    module.exports = function (web) {\r\n        web.__defineGetter__('foo', function () {\r\n            return this.servers;\r\n        });\r\n\r\n        // or\r\n        web.fn('bar', funtion () {\r\n            // do something\r\n        });\r\n    }\r\n    \r\n    \r\n# License \r\n\r\n(The MIT License)\r\n\r\nCopyright (c) 2010-2012 Will Wen Gunn (甘超阳) &lt;willwengunn@gmail.com&gt;\r\n\r\nPermission is hereby granted, free of charge, to any person obtaining\r\na copy of this software and associated documentation files (the\r\n'Software'), to deal in the Software without restriction, including\r\nwithout limitation the rights to use, copy, modify, merge, publish,\r\ndistribute, sublicense, and/or sell copies of the Software, and to\r\npermit persons to whom the Software is furnished to do so, subject to\r\nthe following conditions:\r\n\r\nThe above copyright notice and this permission notice shall be\r\nincluded in all copies or substantial portions of the Software.\r\n\r\nTHE SOFTWARE IS PROVIDED 'AS IS', WITHOUT WARRANTY OF ANY KIND,\r\nEXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF\r\nMERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.\r\nIN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY\r\nCLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT,\r\nTORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE\r\nSOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.",
+  "dist": {
+    "shasum": "8b360016d30b56ce4c2562919bc47321d18924af"
+  }
+}
