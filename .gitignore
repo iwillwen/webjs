@@ -1,7 +1,3 @@
 node_modules
 **.txt
-<<<<<<< HEAD
 npm_debug.log
-=======
-npm_debug.log
->>>>>>> cb1b824aa9bb6a71e5bf597704395773669e108c
