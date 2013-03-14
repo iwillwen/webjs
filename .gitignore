@@ -1,0 +1,3 @@
+node_modules
+**.txt
+npm_debug.log
