@@ -1,6 +1,10 @@
 # webjs: Simple HTTP / TCP development framework.
 
+<<<<<<< HEAD
 For detailed information about this, please visit the [webjs homepage](http://web.c61.me). 如果想获得详细的关于Web.js的信息，请浏览[官方网站](http://web.c61.me)。
+=======
+For detailed information about this, please visit the [webjs homepage](http://webjs.im1996.com). 如果想获得详细的关于Web.js的信息，请浏览[官方网站](http://webjs.im1996.com)。
+>>>>>>> cb1b824aa9bb6a71e5bf597704395773669e108c
 
 # Install
     $ npm install webjs
@@ -249,6 +253,7 @@ You can use it to modular your app functions.
     
 # License 
 
+<<<<<<< HEAD
 (The MIT License)
 
 Copyright (c) 2010-2012 Will Wen Gunn (甘超阳) &lt;willwengunn@gmail.com&gt;
@@ -271,3 +276,27 @@ IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY
 CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT,
 TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
 SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+=======
+    (The MIT License)
+    
+    Copyright (c) 2010-2013 Will Wen Gunn (甘超阳) <willwengunn@gmail.com>
+    
+    Permission is hereby granted, free of charge, to any person obtaining
+    a copy of this software and associated documentation files (the
+    'Software'), to deal in the Software without restriction, including
+    without limitation the rights to use, copy, modify, merge, publish,
+    distribute, sublicense, and/or sell copies of the Software, and to
+    permit persons to whom the Software is furnished to do so, subject to
+    the following conditions:
+    
+    The above copyright notice and this permission notice shall be
+    included in all copies or substantial portions of the Software.
+    
+    THE SOFTWARE IS PROVIDED 'AS IS', WITHOUT WARRANTY OF ANY KIND,
+    EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+    MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.
+    IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY
+    CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT,
+    TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
+    SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+>>>>>>> cb1b824aa9bb6a71e5bf597704395773669e108c

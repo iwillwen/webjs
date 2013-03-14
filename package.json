@@ -34,6 +34,12 @@
     "mime": "latest",
     "crc": "latest"
   },
+<<<<<<< HEAD
+=======
+  "scripts": {
+    "test": "mocha -R spec"
+  },
+>>>>>>> cb1b824aa9bb6a71e5bf597704395773669e108c
   "bin": {
     "webjs": "./bin/webjs"
   },
