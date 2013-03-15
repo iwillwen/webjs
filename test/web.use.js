@@ -29,12 +29,12 @@ describe('web.use route', function () {
         res.data = 'foobar';
         next();
       })
-      .route('get', function (req, res) {
+      .get('/foo', function (req, res) {
         res.send(res.data);
       });
 
     var test = new Tester(app);
-    test.get('http://127.0.0.1/foo', function (msg) {
+    test.get('/foo', function (msg) {
       assert.equal('foobar', msg);
     });
   });

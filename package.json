@@ -35,7 +35,7 @@
     "crc": "latest"
   },
   "scripts": {
-    "test": "mocha -R spec"
+    "test": "mocha -R spec --globals server,httpsServer"
   },
   "bin": {
     "webjs": "./bin/webjs"

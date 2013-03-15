@@ -7,7 +7,6 @@ var host = '127.0.0.1';
 web.run(port)
     .get({
         '/test': function (req, res) {
-            console.log('a')
             res.send('ok');
         }
     });

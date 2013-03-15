@@ -11,17 +11,19 @@ function test (app) {
 
 test.prototype.get = function (url, callback) {
   var res = new dataStream();
-  res.on('complete', function () {
-    callback(res.body().toString());
+  res.on('complete', function (body) {
+    callback(body);
   });
   res.headers = {};
   res.setHeader = res.header = function (key, value) {
     this.headers[key] = value;
   };
+  res.sign = 'self';
 
   var req = new dataStream();
   req.method = 'GET';
   req.url = url;
+  req.sign = 'self';
 
   this.target.emit('request', req, res);
   return this;
@@ -29,14 +31,15 @@ test.prototype.get = function (url, callback) {
 
 test.prototype.post = function (url, data, callback) {
   var res = new dataStream();
-  res.on('complete', function () {
-    callback(res.body().toString());
+  res.on('complete', function (body) {
+    callback(body);
   });
   res.headers = {};
   res.setHeader = function (key, value) {
     this.headers[key] = value;
   };
   res.setEncoding = function () {};
+  res.sign = 'self';
 
   var req = new dataStream();
   req.setEncoding = function () {};
@@ -46,6 +49,7 @@ test.prototype.post = function (url, data, callback) {
   }
   req.method = 'POST';
   req.url = url;
+  req.sign = 'self';
 
   this.target.emit('request', req, res);
   if (data) req.end();
@@ -62,6 +66,7 @@ test.prototype.request = function (method, url, data, callback) {
     this.headers[key] = value;
   };
   res.setEncoding = function () {};
+  res.sign = 'self';
 
   var req = new dataStream();
   req.setEncoding = function () {};
@@ -71,6 +76,7 @@ test.prototype.request = function (method, url, data, callback) {
   }
   req.method = method.toUpperCase();
   req.url = url;
+  req.sign = 'self';
 
   this.target.emit('request', req, res);
   if (data) req.ok().end();

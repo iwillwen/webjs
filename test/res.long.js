@@ -17,8 +17,8 @@ describe('res.sendfile', function () {
     });
 
     var test = new Tester(app);
-    test.get('http://127.0.0.1/', function (msg) {
-      assert.equal('ffoooobbaarr', msg);
+    test.get('/', function (msg) {
+      assert.equal('foobar', msg);
     });
   });
 });

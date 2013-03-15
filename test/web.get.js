@@ -10,7 +10,7 @@ describe('web.get', function () {
     });
 
     var test = new Tester(app);
-    test.get('http://127.0.0.1/', function (msg) {
+    test.get('/', function (msg) {
       assert.equal('foobar', msg);
     });
   });

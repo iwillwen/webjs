@@ -12,7 +12,7 @@ describe('req.body', function () {
       });
 
     var test = new Tester(app);
-    test.post('http://127.0.0.1/', { foo: 'foobar' }, function (msg) {
+    test.post('/', { foo: 'foobar' }, function (msg) {
       assert.equal('foobar', msg);
     });
   });
