@@ -32,17 +32,17 @@
     "dataStream": "latest",
     "connect": "latest",
     "mime": "latest",
-    "crc": "latest",
-    "mocha": ""
+    "crc": "latest"
   },
   "scripts": {
-    "test": "./node_module/.bin/mocha -R spec --globals server,httpsServer"
+    "test": "make test"
   },
   "bin": {
     "webjs": "./bin/webjs"
   },
   "devDependencies": {
     "mocha": "1.6.0",
+    "should": "*",
     "mustache": "latest",
     "jade": "latest"
   },
