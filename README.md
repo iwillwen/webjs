@@ -1,6 +1,8 @@
 # webjs: Simple HTTP / TCP development framework.
 
-For detailed information about this, please visit the [webjs homepage](http://webjs.im1996.com). 如果想获得详细的关于Web.js的信息，请浏览[官方网站](http://webjs.im1996.com)。
+For detailed information about this, please visit the [webjs homepage](http://webjs.im1996.com). 如果想获得详细的关于webjs的信息，请浏览[官方网站](http://webjs.im1996.com)。
+
+[![Build Status](https://travis-ci.org/iwillwen/webjs.png?branch=master)](https://travis-ci.org/iwillwen/webjs)
 
 # Install
     $ npm install webjs
