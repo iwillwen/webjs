@@ -2,7 +2,7 @@
 
 For detailed information about this, please visit the [webjs homepage](http://webjs.im1996.com). 如果想获得详细的关于webjs的信息，请浏览[官方网站](http://webjs.im1996.com)。
 
-[![Build Status](https://travis-ci.org/iwillwen/webjs.png?branch=master)](https://travis-ci.org/iwillwen/webjs)
+[![Build Status](https://travis-ci.org/iwillwen/webjs.png?branch=master)](https://travis-ci.org/iwillwen/webjs)  [![依赖模块状态](https://david-dm.org/iwillwen/webjs.png)](http://david-dm.org/iwillwen/webjs)
 
 # Install
     $ npm install webjs
